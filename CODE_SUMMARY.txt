@@ -1,0 +1,38 @@
+ReadMe.m:->
+
+To see the results of an experiment, please run the following file in MATLAB:
+
+code/show_experiment.m
+
+To see reconstructed figures, please run the following file in MATLAB:
+
+code/figure_reconstruction.m
+
+calc_body_score.m:->
+
+> A function file.
+> Takes two arguments, patch_curr, and noise_floor
+> Takes mean of all the values of the patch_curr array, that have their values greater than noise floor.
+
+calculate_patch_scores.m:->
+
+> A function file.
+>Inputs:
+
+>> img_shifted - images after swaying compensation
+>> chest_z_avg - estimated chest location in z
+>> data.walk_start - the frame when the person started walking
+>> data.walk_end - the frame when the person stopped walking
+
+> Outputs: 
+
+>> scores - scores for each image patch
+>> patches - segmented image patches
+>> weight - scores for body image patches
+>> weight_leg - scores for leg image patches
+
+> runs the script file: segmentation_parameters.m (This script uses chest_z_avg)
+> Defines the following variables:->
+>> scores -> a num_frame_used x 9 sized array
+>> patches -> a num_frame_used x 9 sized array
+>> weight -> 

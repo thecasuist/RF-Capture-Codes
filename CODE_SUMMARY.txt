@@ -35,4 +35,148 @@ calculate_patch_scores.m:->
 > Defines the following variables:->
 >> scores -> a num_frame_used x 9 sized array
 >> patches -> a num_frame_used x 9 sized array
->> weight -> 
+>> weight -> A matrix of dimension num_of_sef_z x num_of_sef_x x num_frame_used
+>> weight_leg -> A matrix of dimension num_of_seg_leg x num_frame_used
+
+> Sets the value of noise_floor
+> calculates the score for each image patch and stores each frame into patches.
+
+combine_snapshots.m
+
+> A function file
+> Inputs:
+
+>> img_shifted_norm -> images after swaying compensation with normalization
+>> weight -> scores for body image patches
+>> weight_lef -> scores for lef image patches
+>> patches -> segmented image patches
+>> chest_z_avg -> estimated chest location in z
+>> debug_flag -> show debug figures
+
+>Outputs:
+
+>> img_final -> combined figure
+
+> Algorithm:->
+
+>> Choose patch with highest score
+>> run segmentation_parameters.m (uses chest_z_avg)
+>> run mask_parameters.m
+>> combine using mask
+>> replace chest part with chest_patch
+>> for each frame, scan through each image segment, if the frame has the patch with highest SNR, create non-zero weight mask for it
+>> Replace chest part with patches summed across time.
+>> crop the final image
+
+estimate_swaying.m
+
+> Estimates chest's location across frames for swaying compensation
+> Input:
+
+>> data.images -> snapshots from RF-capture
+>> data.x_range -> range of snapshots in x dimensino (in meters) 
+>> data.z_range -> range of snapshots in z dimension (in meters)
+>> data.walk_start -> the frame forwhen the person started walking
+>> data;walk_end -> the frame when the person stopped walking
+>> debug_flag -> show debug figures
+
+> Output:
+
+> body_x -> estimated chest location in x
+> chest_z_avg -> estimated chest location in z
+
+> raw estimation; uses the maximum reflection point as raw estimations.
+> outlier rejection; interpolate the chest locations for fram in which the strongest reflection point is not chest
+> In a nutshell, estimates chest x location and chest height
+
+figure_reconstruction.m
+
+> Input:
+
+>> experiment ID
+
+> Output: 
+
+>> reconstructed figure
+
+> Plots the figure
+
+interp_badRegion.m
+
+> A function file.
+> Input:
+
+>> Y-> A column vector, that is a signal to the interpolate.
+
+> Here, bad region is the region to be replaced.
+
+kinect_joint_mapping.m
+
+> This file contains the joint mapping for kinect skeleton.
+
+mask_parameters.m
+
+> Grid points are assigned values for alpha masks
+
+plot_grid.m
+
+> This is a function file.
+> This file plots the segmentation on a given figure.
+
+plot_kinect_skeleton.m
+
+> This is a function file
+> Plots the skeleton capture by Kinect
+> Inputs:
+
+>> h-> MATLAB graphic handler
+>> t-> frame number
+
+>> joints-> cell[1x25], each cell contains coordinates of a joint
+
+Outputs:
+
+>> plot of all the joints with limb connections at time t
+
+read_joint_from_kinect.m
+
+> This script reads in 3D coordinates of skeleton joints recorded by Kinect
+>Input:
+
+>> file location
+
+>Output
+
+>> joints -> each cell component contains 3Dlocation of a joint
+
+segmentation_parameters.m
+
+> Segment points here are for calculating scores/weight only... the real blending is done by the masks
+> All parameter settings done in meters
+
+show_experiment.m
+
+>Input:
+
+>> exp_name:-> Experiment Name
+
+>Output:
+
+>> show RF-Capture snapshots with Kinect Skeleton
+
+swaying_compensation.m
+
+>Center all images to compensate for body swaying
+> Inputs:
+
+>> data.images -> snapshots from RF-capture after beam compensation
+>> body_x -> estimated chest location in c
+>> chest_z_avg -> estimated chest location in z
+>> debug_flag -> show debug figures
+
+> Outputs:
+
+>> img_shifted -> images after swaying compensation
+>> img_shifted_norm-> images after swaying compensation with normalisation
+
+> Does compensation for swaying.
